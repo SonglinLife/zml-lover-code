@@ -67,20 +67,10 @@
         }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-100px) rotate(720deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
         }
 
         /* 主容器 */
@@ -89,37 +79,122 @@
             z-index: 10;
             text-align: center;
             padding: 20px;
+            max-width: 600px;
         }
 
-        /* 代码爱心显示区 */
-        .code-heart {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #ff6b9d;
-            border-radius: 15px;
-            padding: 30px 40px;
-            box-shadow: 0 0 30px rgba(255, 107, 157, 0.5),
-                        inset 0 0 30px rgba(255, 107, 157, 0.1);
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
+        /* Python代码块 */
+        .code-block {
+            background: #282a36;
+            border: 1px solid #44475a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.3);
+            position: relative;
         }
 
-        .code-line {
-            font-size: 1.2rem;
-            letter-spacing: 2px;
+        .code-block::before {
+            content: '● ● ●';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            font-size: 8px;
+            letter-spacing: 4px;
+            color: #ff5555;
+        }
+
+        .code-header {
+            color: #6272a4;
+            font-size: 0.75rem;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-bottom: 1px solid #44475a;
+            padding-bottom: 8px;
+        }
+
+        .code-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            min-height: 280px;
+        }
+
+        .code-content .keyword { color: #ff79c6; }
+        .code-content .string { color: #f1fa8c; }
+        .code-content .function { color: #50fa7b; }
+        .code-content .variable { color: #8be9fd; }
+        .code-content .normal { color: #f8f8f2; }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1em;
+            background: #f8f8f2;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* 运行状态 */
+        .run-status {
+            color: #50fa7b;
+            font-size: 0.9rem;
+            margin: 15px 0;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
+            transition: opacity 0.5s;
+        }
+
+        .run-status.visible { opacity: 1; }
+
+        .run-status .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 输出区域 */
+        .output-block {
+            background: #1e1e1e;
+            border: 1px solid #50fa7b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(80, 250, 123, 0.2);
+            display: none;
+        }
+
+        .output-header {
+            color: #50fa7b;
+            font-size: 0.75rem;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .output-line {
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
             text-shadow: 0 0 10px currentColor;
             white-space: pre;
-            min-height: 1.5em;
+            min-height: 1.4em;
         }
 
-        .code-line.visible {
+        .output-line.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .code-line.rainbow {
+        .output-line.rainbow {
             animation: rainbow 2s linear infinite;
         }
 
@@ -133,12 +208,24 @@
             100% { color: #ff6b6b; }
         }
 
-        /* 大爱心动画 */
+        /* 消息 */
+        .message {
+            color: #fff;
+            font-size: 1.3rem;
+            margin: 20px 0;
+            opacity: 0;
+            transition: opacity 1s ease;
+            text-shadow: 0 0 20px #ff6b9d;
+        }
+
+        .message.visible { opacity: 1; }
+
+        /* 大爱心 */
         .big-heart {
-            font-size: 80px;
+            font-size: 60px;
             animation: heartbeat 1s ease-in-out infinite;
             display: none;
-            margin: 30px 0;
+            margin: 20px 0;
             filter: drop-shadow(0 0 20px #ff6b9d);
         }
 
@@ -149,26 +236,12 @@
             75% { transform: scale(1.15); }
         }
 
-        /* 消息文字 */
-        .message {
-            color: #fff;
-            font-size: 1.5rem;
-            margin: 20px 0;
-            opacity: 0;
-            transition: opacity 1s ease;
-            text-shadow: 0 0 20px #ff6b9d;
-        }
-
-        .message.visible {
-            opacity: 1;
-        }
-
-        /* 照片展示 */
+        /* 照片 */
         .photo-container {
             opacity: 0;
             transform: scale(0.8);
             transition: all 1.5s ease;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         .photo-container.visible {
@@ -179,13 +252,12 @@
         .photo-frame {
             position: relative;
             display: inline-block;
-            padding: 15px;
+            padding: 12px;
             background: linear-gradient(45deg, #ff6b9d, #c44569, #ff6b9d, #f8a5c2);
             background-size: 300% 300%;
             animation: gradientBorder 3s ease infinite;
-            border-radius: 20px;
-            box-shadow: 0 0 40px rgba(255, 107, 157, 0.6),
-                        0 0 80px rgba(255, 107, 157, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(255, 107, 157, 0.6);
         }
 
         @keyframes gradientBorder {
@@ -194,55 +266,27 @@
             100% { background-position: 0% 50%; }
         }
 
-        .photo-frame::before {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            background: #1a0a0a;
-            border-radius: 17px;
-            z-index: -1;
-        }
-
         .photo {
-            max-width: 400px;
-            max-height: 500px;
-            border-radius: 15px;
+            max-width: 350px;
+            max-height: 450px;
+            border-radius: 10px;
             display: block;
         }
 
         .photo-caption {
             color: #f8a5c2;
-            font-size: 1.2rem;
-            margin-top: 20px;
+            font-size: 1.1rem;
+            margin-top: 15px;
             font-style: italic;
             animation: glow 2s ease-in-out infinite alternate;
         }
 
         @keyframes glow {
-            from { text-shadow: 0 0 10px #ff6b9d, 0 0 20px #ff6b9d; }
-            to { text-shadow: 0 0 20px #ff6b9d, 0 0 40px #ff6b9d, 0 0 60px #ff6b9d; }
+            from { text-shadow: 0 0 10px #ff6b9d; }
+            to { text-shadow: 0 0 20px #ff6b9d, 0 0 40px #ff6b9d; }
         }
 
-        /* 粒子爱心 */
-        .particle-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .particle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #ff6b9d;
-            border-radius: 50%;
-            opacity: 0;
-        }
-
-        /* 点击特效 */
+        /* 点击爱心 */
         .click-heart {
             position: fixed;
             pointer-events: none;
@@ -252,21 +296,12 @@
         }
 
         @keyframes clickHeart {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.5) rotate(15deg);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(0.5) translateY(-100px) rotate(-15deg);
-                opacity: 0;
-            }
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(15deg); opacity: 0.8; }
+            100% { transform: scale(0.5) translateY(-100px) rotate(-15deg); opacity: 0; }
         }
 
-        /* 烟花效果 */
+        /* 烟花 */
         .firework {
             position: fixed;
             pointer-events: none;
@@ -275,39 +310,42 @@
 
         .firework-particle {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             animation: fireworkExplode 1s ease-out forwards;
         }
 
         @keyframes fireworkExplode {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(0);
-                opacity: 0;
-            }
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
         }
     </style>
 </head>
 <body>
     <div class="stars" id="stars"></div>
     <div class="floating-hearts" id="floatingHearts"></div>
-    <div class="particle-container" id="particleContainer"></div>
 
     <div class="container">
-        <div class="code-heart" id="codeHeart">
-            <div class="code-line" id="line0"></div>
-            <div class="code-line" id="line1"></div>
-            <div class="code-line" id="line2"></div>
-            <div class="code-line" id="line3"></div>
-            <div class="code-line" id="line4"></div>
-            <div class="code-line" id="line5"></div>
-            <div class="code-line" id="line6"></div>
-            <div class="code-line" id="line7"></div>
+        <div class="code-block">
+            <div class="code-header">💌 她发来的代码.py</div>
+            <div class="code-content" id="codeContent"></div>
+        </div>
+
+        <div class="run-status" id="runStatus">
+            <span class="spinner">⚙️</span> python 她发来的代码.py
+        </div>
+
+        <div class="output-block" id="outputBlock">
+            <div class="output-header">>>> 输出结果:</div>
+            <div class="output-line" id="out0"></div>
+            <div class="output-line" id="out1"></div>
+            <div class="output-line" id="out2"></div>
+            <div class="output-line" id="out3"></div>
+            <div class="output-line" id="out4"></div>
+            <div class="output-line" id="out5"></div>
+            <div class="output-line" id="out6"></div>
+            <div class="output-line" id="out7"></div>
         </div>
 
         <div class="big-heart" id="bigHeart">❤️</div>
@@ -317,16 +355,43 @@
 
         <div class="photo-container" id="photoContainer">
             <div class="photo-frame">
-                <img src="photo.jpg" alt="Our Love" class="photo" id="photo">
+                <img src="photo.jpg" alt="Our Love" class="photo">
             </div>
             <div class="photo-caption">Forever & Always 💑</div>
         </div>
     </div>
 
     <script>
-        // 创建星星背景
+        // 她发的原始代码
+        const pythonCode = `<span class="variable">heart</span> <span class="normal">=</span> <span class="normal">[</span>
+    <span class="string">"  ❤️❤️❤️  "</span><span class="normal">,</span>
+    <span class="string">" ❤️❤️❤️❤️ "</span><span class="normal">,</span>
+    <span class="string">"❤️❤️❤️❤️❤️"</span><span class="normal">,</span>
+    <span class="string">"❤️❤️❤️❤️❤️"</span><span class="normal">,</span>
+    <span class="string">" ❤️❤️❤️❤️ "</span><span class="normal">,</span>
+    <span class="string">"  ❤️❤️❤️  "</span><span class="normal">,</span>
+    <span class="string">"   ❤️❤️   "</span><span class="normal">,</span>
+    <span class="string">"    ❤️    "</span>
+<span class="normal">]</span>
+
+<span class="keyword">for</span> <span class="variable">line</span> <span class="keyword">in</span> <span class="variable">heart</span><span class="normal">:</span>
+    <span class="function">print</span><span class="normal">(</span><span class="variable">line</span><span class="normal">)</span>`;
+
+        // 输出的爱心
+        const heartOutput = [
+            "  ❤️❤️❤️  ",
+            " ❤️❤️❤️❤️ ",
+            "❤️❤️❤️❤️❤️",
+            "❤️❤️❤️❤️❤️",
+            " ❤️❤️❤️❤️ ",
+            "  ❤️❤️❤️  ",
+            "   ❤️❤️   ",
+            "    ❤️    "
+        ];
+
+        // 创建星星
         function createStars() {
-            const starsContainer = document.getElementById('stars');
+            const container = document.getElementById('stars');
             for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
@@ -335,14 +400,14 @@
                 star.style.width = Math.random() * 3 + 1 + 'px';
                 star.style.height = star.style.width;
                 star.style.animationDelay = Math.random() * 2 + 's';
-                starsContainer.appendChild(star);
+                container.appendChild(star);
             }
         }
 
         // 创建漂浮爱心
         function createFloatingHearts() {
             const container = document.getElementById('floatingHearts');
-            const hearts = ['❤️', '💕', '💖', '💗', '💓', '💝', '💘'];
+            const hearts = ['❤️', '💕', '💖', '💗', '💓'];
 
             setInterval(() => {
                 const heart = document.createElement('div');
@@ -350,56 +415,71 @@
                 heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
                 heart.style.left = Math.random() * 100 + '%';
                 heart.style.animationDuration = (4 + Math.random() * 4) + 's';
-                heart.style.fontSize = (15 + Math.random() * 20) + 'px';
+                heart.style.fontSize = (15 + Math.random() * 15) + 'px';
                 container.appendChild(heart);
-
                 setTimeout(() => heart.remove(), 8000);
-            }, 500);
+            }, 600);
         }
 
-        // 爱心代码动画
-        const heartLines = [
-            "  💖💖   💖💖  ",
-            " 💖💖💖 💖💖💖 ",
-            "💖💖💖💖💖💖💖",
-            "💖💖💖💖💖💖💖",
-            " 💖💖💖💖💖💖 ",
-            "  💖💖💖💖💖  ",
-            "   💖💖💖💖   ",
-            "    💖💖💖    ",
-        ];
+        // 打字机效果显示代码
+        let codeIndex = 0;
+        const plainCode = pythonCode.replace(/<[^>]+>/g, '');
 
-        let currentLine = 0;
-        let currentChar = 0;
+        function typeCode() {
+            const codeEl = document.getElementById('codeContent');
+            if (codeIndex < plainCode.length) {
+                // 逐字显示，但保留HTML格式
+                const partialPlain = plainCode.substring(0, codeIndex + 1);
+                let result = '';
+                let plainIdx = 0;
+                let inTag = false;
 
-        function typeHeartLine() {
-            if (currentLine >= heartLines.length) {
-                setTimeout(showMessages, 500);
-                return;
-            }
+                for (let i = 0; i < pythonCode.length && plainIdx <= codeIndex; i++) {
+                    if (pythonCode[i] === '<') inTag = true;
+                    if (!inTag) plainIdx++;
+                    if (plainIdx <= codeIndex + 1) result += pythonCode[i];
+                    if (pythonCode[i] === '>') inTag = false;
+                }
 
-            const lineElement = document.getElementById('line' + currentLine);
-            lineElement.classList.add('visible', 'rainbow');
-
-            if (currentChar < heartLines[currentLine].length) {
-                lineElement.textContent = heartLines[currentLine].substring(0, currentChar + 1);
-                currentChar++;
-                setTimeout(typeHeartLine, 50);
+                codeEl.innerHTML = result + '<span class="cursor"></span>';
+                codeIndex++;
+                setTimeout(typeCode, 25);
             } else {
-                currentChar = 0;
-                currentLine++;
-                setTimeout(typeHeartLine, 200);
+                codeEl.innerHTML = pythonCode;
+                setTimeout(runCode, 800);
+            }
+        }
+
+        // 运行代码
+        function runCode() {
+            document.getElementById('runStatus').classList.add('visible');
+            setTimeout(() => {
+                document.getElementById('outputBlock').style.display = 'block';
+                setTimeout(showOutput, 500);
+            }, 1500);
+        }
+
+        // 显示输出
+        let outputLine = 0;
+        function showOutput() {
+            if (outputLine < heartOutput.length) {
+                const el = document.getElementById('out' + outputLine);
+                el.textContent = heartOutput[outputLine];
+                el.classList.add('visible', 'rainbow');
+                outputLine++;
+                setTimeout(showOutput, 200);
+            } else {
+                setTimeout(showMessages, 800);
             }
         }
 
         // 显示消息
         function showMessages() {
-            const bigHeart = document.getElementById('bigHeart');
-            bigHeart.style.display = 'block';
+            document.getElementById('bigHeart').style.display = 'block';
+            createFirework(window.innerWidth / 2, window.innerHeight / 3);
 
             setTimeout(() => {
                 document.getElementById('message1').classList.add('visible');
-                createFirework(window.innerWidth / 2, window.innerHeight / 3);
             }, 500);
 
             setTimeout(() => {
@@ -414,60 +494,53 @@
         // 显示照片
         function showPhoto() {
             document.getElementById('photoContainer').classList.add('visible');
-
-            // 多重烟花
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
                     createFirework(
                         Math.random() * window.innerWidth,
-                        Math.random() * window.innerHeight * 0.6
+                        Math.random() * window.innerHeight * 0.5
                     );
                 }, i * 300);
             }
         }
 
-        // 烟花效果
+        // 烟花
         function createFirework(x, y) {
-            const firework = document.createElement('div');
-            firework.className = 'firework';
-            firework.style.left = x + 'px';
-            firework.style.top = y + 'px';
-
-            const colors = ['#ff6b9d', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#f8a5c2'];
-
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'firework-particle';
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-                const angle = (i / 20) * Math.PI * 2;
-                const distance = 50 + Math.random() * 50;
-                particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
-                particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
-
-                firework.appendChild(particle);
+            const fw = document.createElement('div');
+            fw.className = 'firework';
+            fw.style.left = x + 'px';
+            fw.style.top = y + 'px';
+            const colors = ['#ff6b9d', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                p.className = 'firework-particle';
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                const angle = (i / 15) * Math.PI * 2;
+                const dist = 40 + Math.random() * 40;
+                p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                fw.appendChild(p);
             }
-
-            document.body.appendChild(firework);
-            setTimeout(() => firework.remove(), 1000);
+            document.body.appendChild(fw);
+            setTimeout(() => fw.remove(), 1000);
         }
 
-        // 点击生成爱心
+        // 点击爱心
         document.addEventListener('click', (e) => {
             const heart = document.createElement('div');
             heart.className = 'click-heart';
-            heart.textContent = ['❤️', '💖', '💕', '💗'][Math.floor(Math.random() * 4)];
+            heart.textContent = ['❤️', '💖', '💕'][Math.floor(Math.random() * 3)];
             heart.style.left = e.clientX - 15 + 'px';
             heart.style.top = e.clientY - 15 + 'px';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 1000);
         });
 
-        // 初始化
+        // 启动
         window.onload = () => {
             createStars();
             createFloatingHearts();
-            setTimeout(typeHeartLine, 1000);
+            setTimeout(typeCode, 1000);
         };
     </script>
 </body>
