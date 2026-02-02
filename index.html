@@ -314,7 +314,6 @@
 
         <div class="message" id="message1">你发的代码，我帮你运行了 💕</div>
         <div class="message" id="message2">输出结果是...</div>
-        <div class="message" id="message3">我爱你 ❤️</div>
 
         <div class="photo-container" id="photoContainer">
             <div class="photo-frame">
@@ -405,15 +404,11 @@
 
             setTimeout(() => {
                 document.getElementById('message2').classList.add('visible');
-            }, 2000);
-
-            setTimeout(() => {
-                document.getElementById('message3').classList.add('visible');
                 createFirework(window.innerWidth / 3, window.innerHeight / 2);
                 createFirework(window.innerWidth * 2 / 3, window.innerHeight / 2);
-            }, 3500);
+            }, 2000);
 
-            setTimeout(showPhoto, 5000);
+            setTimeout(showPhoto, 3500);
         }
 
         // 显示照片
